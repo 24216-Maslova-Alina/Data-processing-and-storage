@@ -1,3 +1,5 @@
+package main.java;
+
 public interface StringList extends Iterable<String> {
 
     void addFirst(String str);

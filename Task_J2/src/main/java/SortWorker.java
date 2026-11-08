@@ -1,3 +1,5 @@
+package main.java;
+
 public class SortWorker extends Thread {
 
     private final StringList list;
