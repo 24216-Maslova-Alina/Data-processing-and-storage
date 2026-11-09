@@ -33,7 +33,7 @@ public class MainTest {
     @Test
     public void linkedListFullRun() throws Exception {
         // 1 - выбор списка, потом строки, пустая строка (вывод), exit
-        String output = runMain("1\nb\na\n\nexit\n");
+        String output = runMain("1\n2\n0\n0\nb\na\n\nexit\n");
 
         assertTrue(output.contains("Используется LinkedStringList"), output);
         assertTrue(output.contains("Текущий список"), output);
@@ -43,8 +43,7 @@ public class MainTest {
     // проверяет весь запуск с SynchronizedArrayList: выбор списка, ввод 3 строк, exit
     @Test
     public void synchronizedListFullRun() throws Exception {
-        String output = runMain("2\nb\na\nc\nexit\n");
-
+        String output = runMain("2\n2\n0\n0\nb\na\nc\nexit\n");
         assertTrue(output.contains("Используется SynchronizedArrayList"), output);
         assertTrue(output.contains("Размер списка: 3"), output);
     }

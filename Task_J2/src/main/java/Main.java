@@ -8,13 +8,11 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
 
-        // Выбор реализации списка
         System.out.println("Выберите реализацию списка:");
         System.out.println("1 - LinkedStringList");
         System.out.println("2 - SynchronizedArrayList");
 
         int choice = scanner.nextInt();
-        scanner.nextLine();
 
         StringList list;
 
@@ -30,37 +28,59 @@ public class Main {
             return;
         }
 
-        // Создание потоков
-        InputThread inputThread = new InputThread(list, scanner);
+        System.out.println("Количество потоков-сортировщиков:");
+        int count = scanner.nextInt();
+        System.out.println("Пауза между шагами (мс):");
+        long between = scanner.nextLong();
+        System.out.println("Пауза внутри шага (мс):");
+        long inside = scanner.nextLong();
+        scanner.nextLine();
 
-        SortWorker worker1 = new SortWorker(list, 500, 100);
-        SortWorker worker2 = new SortWorker(list, 500, 100);
+        // создаём и запускаем сортировщиков
+        SortWorker[] workers = new SortWorker[count];
+        for (int i = 0; i < count; i++) {
+            workers[i] = new SortWorker(list, between, inside);
+            workers[i].start();
+        }
 
-        // Запуск потоков
-        worker1.start();
-        worker2.start();
-        inputThread.start();
+        // родительский поток сам читает ввод
+        System.out.println("Вводите строки. Пустая строка - вывод списка");
+        System.out.println("Чтобы завершить ввод и начать сортировку введите 'exit'");
 
-        // Ожидание завершения ввода
-        inputThread.join();
+        while (scanner.hasNextLine()) {
+            String input = scanner.nextLine();
 
-        // Остановка сортировщиков
-        worker1.stopSorting();
-        worker2.stopSorting();
+            if (input.equals("exit")) {
+                break;
+            } else if (input.isEmpty()) {
+                System.out.println("Текущий список: ");
+                list.printList();
+            } else {
+                // длинные строки режем на куски по 80 символов
+                for (int i = 0; i < input.length(); i += 80) {
+                    list.addFirst(input.substring(i, Math.min(i + 80, input.length())));
+                }
+            }
+        }
 
-        // Ожидание завершения сортировщиков
-        worker1.join();
-        worker2.join();
+        // остановка сортировщиков
+        for (SortWorker worker : workers) {
+            worker.stopSorting();
+        }
+        for (SortWorker worker : workers) {
+            worker.join();
+        }
 
-        // Вывод результата
         System.out.println("\nПосле сортировки:");
         list.printList();
 
         System.out.println("\nСтатистика:");
-        System.out.println("Шаги первого потока: " + worker1.getSteps());
-        System.out.println("Шаги второго потока: " + worker2.getSteps());
-        System.out.println("Общее количество шагов: "
-                + (worker1.getSteps() + worker2.getSteps()));
+        long total = 0;
+        for (int i = 0; i < count; i++) {
+            System.out.println("Шаги потока " + (i + 1) + ": " + workers[i].getSteps());
+            total += workers[i].getSteps();
+        }
+        System.out.println("Общее количество шагов: " + total);
         System.out.println("Размер списка: " + list.size());
 
         scanner.close();
