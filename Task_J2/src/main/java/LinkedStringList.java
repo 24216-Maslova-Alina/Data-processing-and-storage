@@ -19,7 +19,7 @@ public class LinkedStringList implements StringList {
         }
     }
 
-    private final Node sentinel = new Node(null, null);
+    private final Node sentinel = new Node(null, null); // фиктивная голова
 
     private final AtomicInteger size = new AtomicInteger();
 

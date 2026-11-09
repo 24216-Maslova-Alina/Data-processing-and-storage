@@ -21,26 +21,24 @@ public class SortWorker extends Thread {
 
     @Override
     public void run() {
+        int position = 0;
+
         while (running && !isInterrupted()) {
-            int position = 0;
+            boolean done = list.sortStep(position, delayInsideStep);   // пауза внутри шага теперь в sortStep
 
-            while (running && !isInterrupted()) {
-                boolean done = list.sortStep(position, delayInsideStep);   // ИЗМЕНЕНО: пауза внутри шага теперь в sortStep
-
-                if (!done) {
-                    break;                     // дошли до конца списка, проход завершён
-                }
-
-                steps++;                       // единственный писатель, поэтому volatile
-                // достаточно
-                position++;
-                pause(delayBetweenSteps);
+            if (!done) {
+                break;                     // дошли до конца списка, проход завершён
             }
 
-            // НОВОЕ: если список пустой или из одного элемента, не крутимся впустую
-            if (position == 0) {
-                pause(Math.max(delayBetweenSteps, 50));
-            }
+            steps++;                       // единственный писатель, поэтому volatile
+            // достаточно
+            position++;
+            pause(delayBetweenSteps);
+        }
+
+        // если список пустой или из одного элемента, не крутимся впустую
+        if (position == 0) {
+            pause(Math.max(delayBetweenSteps, 50));
         }
     }
 
