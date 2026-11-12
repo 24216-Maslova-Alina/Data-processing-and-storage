@@ -26,19 +26,17 @@ public class SortWorker extends Thread {
         while (running && !isInterrupted()) {
             boolean done = list.sortStep(position, delayInsideStep);   // пауза внутри шага теперь в sortStep
 
-            if (!done) {
-                break;                     // дошли до конца списка, проход завершён
+            if (done) {
+                steps++;
+                position++;
+                pause(delayBetweenSteps);
+            } else {
+                // дошли до конца списка (или он пустой): следующий проход начнётся с начала
+                if (position == 0) {
+                    pause(Math.max(delayBetweenSteps, 50));   // список пустой или из 1 элемента
+                }
+                position = 0;
             }
-
-            steps++;                       // единственный писатель, поэтому volatile
-            // достаточно
-            position++;
-            pause(delayBetweenSteps);
-        }
-
-        // если список пустой или из одного элемента, не крутимся впустую
-        if (position == 0) {
-            pause(Math.max(delayBetweenSteps, 50));
         }
     }
 
