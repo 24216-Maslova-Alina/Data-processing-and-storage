@@ -11,3 +11,7 @@ out/
 
 # Maven
 target/
+
+# Clojure
+.clj-kondo/
+.lsp/
