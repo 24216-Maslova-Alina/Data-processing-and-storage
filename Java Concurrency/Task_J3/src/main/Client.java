@@ -6,6 +6,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -19,6 +20,7 @@ public class Client {
     public Client(String port) {
         this.basePath = "http://localhost:" + port;
     }
+
     public ServerResponse sendRequest(String path) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(basePath + (path.startsWith("/") ? path : "/" + path)))
@@ -41,7 +43,7 @@ public class Client {
         if (serverResponse == null
                 || serverResponse.message() == null
                 || serverResponse.successors() == null
-                || serverResponse.successors().stream().anyMatch(s -> s == null)) {
+                || serverResponse.successors().stream().anyMatch(Objects :: isNull)) {
             System.err.println("Не удалось получить необходимые данные!");
             return null;
         }
