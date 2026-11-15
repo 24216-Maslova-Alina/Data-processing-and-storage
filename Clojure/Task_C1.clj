@@ -17,7 +17,7 @@
 (println (make-words (list "a" "b" "c") 2))
 (println (make-words (list "a" "b" "c") 3))
 
-(require '[clojure.test :refer :all])
+(require '[clojure.test :refer [deftest is run-tests]])
 
 (deftest test-example-from-task
   (is (= (list "ab" "ac" "ba" "bc" "ca" "cb")
