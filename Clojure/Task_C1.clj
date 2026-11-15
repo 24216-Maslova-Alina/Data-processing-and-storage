@@ -16,3 +16,14 @@
 
 (println (make-words (list "a" "b" "c") 2))
 (println (make-words (list "a" "b" "c") 3))
+
+(require '[clojure.test :refer :all])
+
+(deftest test-example-from-task
+  (is (= (list "ab" "ac" "ba" "bc" "ca" "cb")
+         (sort (make-words (list "a" "b" "c") 2)))))
+
+(deftest test-count-of-words
+  (is (= 12 (count (make-words (list "a" "b" "c") 3)))))
+
+(run-tests)
