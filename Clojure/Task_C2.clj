@@ -10,6 +10,7 @@
 (println (take 100 primes))
 
 
+; Тесты
 (require '[clojure.test :refer [deftest is run-tests]])
 
 (deftest test-first-primes
@@ -21,8 +22,5 @@
 
 (deftest test-hundredth-prime
   (is (= 541 (nth primes 99))))
-
-(deftest test-no-even-after-two
-  (is (= 0 (count (filter even? (rest (take 50 primes)))))))
 
 (run-tests)

@@ -17,6 +17,8 @@
 (println (make-words (list "a" "b" "c") 2))
 (println (make-words (list "a" "b" "c") 3))
 
+
+; Тесты
 (require '[clojure.test :refer [deftest is run-tests]])
 
 (deftest test-example-from-task
