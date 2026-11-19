@@ -19,17 +19,21 @@
 ; Тесты
 (require '[clojure.test :refer [deftest is run-tests]])
 
+;; Корректность на конечной последовательности
 (deftest test-finite
   (is (= (filter even? (range 1000))
          (pfilter even? (range 1000) 10 4))))
 
+;; Пустой вход:
 (deftest test-empty
   (is (= (list) (pfilter even? (list) 10 4))))
 
+;; Неполный последний блок: (range 7) с block-size=3
 (deftest test-last-block
   (is (= (filter odd? (range 7))
          (pfilter odd? (range 7) 3 2))))
 
+;; Бесконечная последовательность + take:
 (deftest test-infinite
   (is (= (list 0 2 4 6 8)
          (take 5 (pfilter even? (iterate inc 0) 10 4)))))
